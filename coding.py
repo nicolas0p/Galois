@@ -14,19 +14,19 @@ class Matrix:
             self.cols = len(data[0])
         else:
             self.data = []
-            for r in xrange(rows):
+            for r in range(rows):
                 if hasattr(fill,'__call__'):
-                    row = [fill(r,c) for c in xrange(cols)]
+                    row = [fill(r,c) for c in range(cols)]
                 else:
-                    row = [fill for c in xrange(cols)]
+                    row = [fill for c in range(cols)]
                 self.data.append(row)
 
     @staticmethod
     def get_identity(size):
         data = []
-        for r in xrange(size):
+        for r in range(size):
             data.append([])
-            for c in xrange(size):
+            for c in range(size):
                 data[r].append(1 if r == c else 0)
         return Matrix(data=data)
     
@@ -66,7 +66,7 @@ class Matrix:
         assert self.rows == other.rows
         assert self.cols == other.cols
         newData = []
-        for r in xrange(self.rows):
+        for r in range(self.rows):
             row = [x+y for (x,y) in 
                 zip(self.get_row(r), other.get_row(r))]
             newData.append(row)
@@ -76,7 +76,7 @@ class Matrix:
         assert self.rows == other.rows
         assert self.cols == other.cols
         newData = []
-        for r in xrange(self.rows):
+        for r in range(self.rows):
             row = [x-y for (x,y) in 
                 zip(self.get_row(r), other.get_row(r))]
             newData.append(row)
@@ -88,18 +88,18 @@ class Matrix:
             zero = self.get(0,0)
             zero = zero-zero
             data = []
-            for i in xrange(self.rows):
+            for i in range(self.rows):
                 data.append([])
-                for j in xrange(other.cols):
+                for j in range(other.cols):
                     data[i].append(zero)
-                    for k in xrange(self.cols):
+                    for k in range(self.cols):
                         data[i][j]+=self.get(i,k)*other.get(k,j)
             return Matrix(data=data)
         else:
             data = []
-            for r in xrange(self.rows):
+            for r in range(self.rows):
                 data.append([])
-                for c in xrange(self.cols):
+                for c in range(self.cols):
                     data[r].append(self.data[r][c]*other)
             return Matrix(data=data)
     
@@ -111,15 +111,15 @@ class Matrix:
         assert p>=1
         assert self.rows == self.cols
         result = copy.deepcopy(self)
-        for i in xrange(p-1):
+        for i in range(p-1):
             result*=self
         return result
 
     def __neg__(self):
         data = []
-        for r in xrange(self.rows):
+        for r in range(self.rows):
             data.append([])
-            for c in xrange(self.cols):
+            for c in range(self.cols):
                  data[r].append(-self.get(r,c))
         return Matrix(data=data)
 
@@ -128,8 +128,8 @@ class Matrix:
             return False
         if self.cols != other.cols:
             return False
-        for r in xrange(self.rows):
-            for c in xrange(self.cols):
+        for r in range(self.rows):
+            for c in range(self.cols):
                 if self.get(r,c) != other.get(r,c):
                     return False
         return True
@@ -154,16 +154,16 @@ class Matrix:
 
     def transpose(self):
         data = []
-        for c in xrange(self.cols):
+        for c in range(self.cols):
             data.append([])
-            for r in xrange(self.rows):
+            for r in range(self.rows):
                 data[c].append(self.get(r,c))
         return Matrix(data=data)
 
     def get_reduced_echelon(self):
         m = copy.deepcopy(self)    
         def get_pivot(matrix, r, c):
-            for i in xrange(r, matrix.rows):
+            for i in range(r, matrix.rows):
                 v = matrix.get(i,c)
                 if v != v-v:
                     return i
@@ -177,16 +177,16 @@ class Matrix:
         def get_row_mult(matrix, row, mult):
             return [v*mult for v in matrix.data[row]]    
         def row_add(matrix, row, add):
-            for i in xrange(len(add)):
+            for i in range(len(add)):
                 matrix.data[row][i] = matrix.data[row][i]+add[i]
         r = 0
-        for c in xrange(m.cols):
+        for c in range(m.cols):
             pivot = get_pivot(m, r, c)
             if pivot is not None:
                 swap_rows(m, r, pivot)
                 pivot = r
                 div_row(m, r, m.get(r,c))
-                for i in xrange(m.rows):
+                for i in range(m.rows):
                     if i == r:
                         continue
                     add = get_row_mult(m, r, -m.get(i,c))
@@ -235,7 +235,7 @@ class LinearBlockCode(Code):
         self.H = (-(P.transpose())).join_with(I)    
         self.words = self.base**G.rows
         Code.__init__(self,1)
-        self.code_list = [self.encode([w]) for w in xrange(self.words)]
+        self.code_list = [self.encode([w]) for w in range(self.words)]
 
     def encode(self, words):
         bits = []
@@ -243,7 +243,7 @@ class LinearBlockCode(Code):
         zero = zero-zero
         for word in words:
             w = to_base(word, self.base)
-            w = [zero for i in xrange(self.G.rows-len(w))]+w
+            w = [zero for i in range(self.G.rows-len(w))]+w
             w = Matrix(data=[w])
             c = w*self.G
             bits = bits+c.get_row(0)
@@ -257,9 +257,9 @@ class LinearBlockCode(Code):
 
     def decode(self, bits):
         def get_word(w):
-            return [bits[w*self.G.rows+i] for i in xrange(self.G.cols)]
+            return [bits[w*self.G.rows+i] for i in range(self.G.cols)]
         words = len(bits)/self.G.cols
-        code_words = [get_word(w) for w in xrange(words)]
+        code_words = [get_word(w) for w in range(words)]
         words = []
         for code in code_words:
             min_dist = float("inf")
@@ -276,18 +276,18 @@ class LinearBlockCode(Code):
         return random.randint(0,self.words-1)
 
     def word_iter(self):
-        return xrange(self.words)
+        return list(range(self.words))
 
 def run_test(code, channel=TestChannel(0), trials=10000):
     errors = 0.0
     words_sent = 0.0
     bits_sent = 0.0
-    for i in xrange(trials):
-        w_in = [code.get_random_word() for i in xrange(code.block_size)]
+    for i in range(trials):
+        w_in = [code.get_random_word() for i in range(code.block_size)]
         b_in = code.encode(w_in)
         b_out = channel.transmit(b_in)
         w_out = code.decode(b_out)
-        for j in xrange(len(w_in)):
+        for j in range(len(w_in)):
             if w_in[j] != w_out[j]:
                 errors+= 1
         words_sent+= len(w_in)

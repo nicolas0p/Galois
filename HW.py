@@ -17,10 +17,10 @@ ws = [0, 0, 1, 0, 0, 1,
 ws = [FFE(i,2) for i in ws]
 
 words = c.decode(ws)
-print words
+print(words)
 
 #19
-print "-"*20
+print(("-"*20))
 g = [
 	[1, 0, 0, 0, 1, 1, 0],
 	[0, 1, 0, 0, 1, 0, 1],
@@ -31,7 +31,7 @@ g = Matrix(data=g).to_GF(2)
 lbc = LinearBlockCode(g)
 
 words = GF(2)**4
-code_words = [lbc.encode([w]) for w in xrange(2**4)]
+code_words = [lbc.encode([w]) for w in range(2**4)]
 zero = [FFE(0,2)]*7
 deltas = [d for d in GF(2)**7 if hamming_distance(d,zero)>=2]
 
@@ -53,11 +53,11 @@ for c,code in enumerate(code_words):
 		latex+="\\\\\n\\hline\n"
 		out.write(latex)
 		if words[c]==decode:
-			print "ERROR"
+			print("ERROR")
 out.close()
 
 #29
-print "Problem 29"
+print("Problem 29")
 g = [
 	[1, 0, 0, 1, 2],
 	[0, 1, 1, 2, 3]
@@ -67,7 +67,7 @@ lbc = LinearBlockCode(g)
 GF4 = GF(4)
 GF4_5 = GF4**5
 zero = [GF4[0]]*5
-print zero
+print(zero)
 deltas = [d for d in GF4_5 if hamming_distance(d, zero)==1]
 for word in lbc.word_iter():
     for delta in deltas:
@@ -76,7 +76,7 @@ for word in lbc.word_iter():
         received = received.data[0]
         decoded = lbc.decode(received)[0]
         if decoded != word:
-            print "ERROR"
-print lbc.words
+            print("ERROR")
+print((lbc.words))
 
 

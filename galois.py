@@ -235,7 +235,7 @@ class FFE:
         else:
             return other.__rmul__(self)
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         if isinstance(other,FFE):
             assert self.p == other.p
             return self*other.mul_inv()
@@ -326,11 +326,11 @@ class FFE:
     def __repr__(self):
         return "FFE(%s,%s)"%(str(self.i),str(self.p))
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.i!=0
 
     def __int__(self):
-        return self.i
+        return int(self.i)
 
     def __float__(self):
         return float(self.i)
@@ -339,7 +339,7 @@ class FFE:
         return complex(self.i)
 
     def __long__(self):
-        return long(self.i)
+        return int(self.i)
     
     def __oct__(self):
         return oct(self.i)
@@ -404,7 +404,7 @@ class Polynomial:
     def __add__(self, other):
         result = []
         zero = self._zero_()
-        for i in xrange(max(self.deg(), other.deg())+1):
+        for i in range(max(self.deg(), other.deg())+1):
             coef = zero
             if i <= self.deg():
                 coef = coef+self.coefficients[i]
@@ -426,7 +426,7 @@ class Polynomial:
         zero = self._zero_()
         for coresult in results:
             result.append(zero)
-            for i in xrange(len(coresult)):
+            for i in range(len(coresult)):
                 result[-i-1]+= coresult[-i-1]
         return Polynomial(result)
 
@@ -450,7 +450,7 @@ class Polynomial:
 
     def __str__(self):
         ret = ""
-        for i in xrange(self.deg()+1):
+        for i in range(self.deg()+1):
             if i!=0:
                 ret+="+"
             ret += "(%s)x^%d"%(str(self.coefficients[i]),i)
@@ -506,13 +506,13 @@ class Zmod(list):
     def __init__(self, p):
         list.__init__(self)
         self.n = p
-        for i in xrange(p):
+        for i in range(p):
             self.append(FFE(i,p))
 
     def __pow__(self, n):
         assert n>=1
         perms = [[i] for i in self]
-        for i in xrange(1,n):
+        for i in range(1,n):
             new_perms = []
             for perm in perms:
                 for new in self:

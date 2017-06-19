@@ -68,4 +68,4 @@ solve = aug.get_reduced_echelon().submatrix(0,3,3,1)
 assert solve==x
 
 
-print "All Tests Passed."
+print("All Tests Passed.")
