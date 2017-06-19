@@ -1,5 +1,6 @@
 Galois
 ======
+This is a fork from the original Galois project from Glank. The following text is from the original README.
 
 Galois is a set of math utilities for finite fields and coding theory applications in Python.
 The tool is still in development but will be completed by the end of this summer.
